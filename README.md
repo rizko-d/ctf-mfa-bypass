@@ -382,5 +382,3 @@ SCENARIO75{BLUE_L0G_HUnt3r_M4st3r}
 ```
 
 ---
-
-*Lab built for PT Nauli Mula Data — Security Engineer Practical Assessment*
