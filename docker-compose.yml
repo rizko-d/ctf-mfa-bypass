@@ -1,0 +1,43 @@
+version: "3.8"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CTF Lab – Red vs. Blue: Cookies Reuse & MFA Bypass
+# Deploy with: docker compose up -d --build
+# Web app  → http://feedback.admin.local:3075
+# SSH      → ssh analyst@feedback.admin.local -p 2275  (pass: blue_team_rocks)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  admin-feedback:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: admin-feedback-system
+    hostname: feedback.admin.local
+    restart: unless-stopped
+
+    ports:
+      - "3075:3075"   # Vulnerable web application
+      - "2275:2275"   # Blue Team SSH access
+
+    volumes:
+      - logs_data:/opt/admin/logs
+
+    environment:
+      - NODE_ENV=production
+
+    # Optional: assign a static IP on an internal bridge network
+    networks:
+      lab_net:
+        ipv4_address: 10.10.14.10
+
+networks:
+  lab_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.14.0/24
+
+volumes:
+  logs_data:
+    driver: local
